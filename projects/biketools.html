@@ -32,9 +32,9 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" id="horizDistUnits">
-								<li><a class="dropdown-item" href="#">mi</a></li>
-								<li><a class="dropdown-item" href="#">km</a></li>
-								<li><a class="dropdown-item" href="#">smoots</a></li>
+								<li><a class="dropdown-item">mi</a></li>
+								<li><a class="dropdown-item">km</a></li>
+								<li><a class="dropdown-item">smoots</a></li>
 							</ul>
 						</div>
 					</div>
@@ -47,19 +47,78 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" id="vertDistUnits">
-								<li><a class="dropdown-item" href="#">feet</a></li>
-								<li><a class="dropdown-item" href="#">meters</a></li>
+								<li><a class="dropdown-item">feet</a></li>
+								<li><a class="dropdown-item">meters</a></li>
 							</ul>
 						</div>
 					</div>
 					<h1></h1>
-					<button type="button" onclick="myFunction()" class="btn btn-primary">Calculate</button>
+					<button type="button" onclick="calculateGrade()" class="btn btn-primary">Calculate</button>
+					<h1></h1>
+					<small>This calculator also works for calculating the Strava categorization of a climb.</small>
 				</form>
 			</div>
 			<div class="col-sm-6 py-3 px-lg-4 border bg-light">
 				<h3 id="avgGrade" style="display: none;">The average grade of this climb is <b id="percentGrade">0.00%</b>.</h3>
 				<br>
 				<h5 id="strava" style="display: none;">On Strava, this climb would be considered <b id="climbCat">uncategorized</b>.</h5>
+			</div>
+			<br>
+
+			<div class="col-sm-6 py-3 px-lg-4 border bg-light">
+				<h3>Bikepacking trip time calculator</h3>
+				<form>
+					<h6>Enter the distance of the route you've planned:</h6>
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="486" aria-label="Text input with dropdown button" id="bikepackDistance">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">mi
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" id="bikepackDistUnits">
+								<li><a class="dropdown-item">mi</a></li>
+								<li><a class="dropdown-item">km</a></li>
+								<li><a class="dropdown-item">smoots</a></li>
+							</ul>
+						</div>
+					</div>
+					<h1></h1>
+					<h6>Enter the amount of time or distance you've planned for each day:</h6>
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="8" aria-label="Text input with dropdown button" id="bikepackTime">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">hours
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" id="bikepackTimeUnits">
+								<li><a class="dropdown-item">hours</a></li>
+								<li><a class="dropdown-item">mi</a></li>
+								<li><a class="dropdown-item">km</a></li>
+								<li><a class="dropdown-item">smoots</a></li>
+							</ul>
+						</div>
+					</div>
+					<h1></h1>
+					<h6 id="mphForHours">Enter the speed you think you'll average:</h6>
+					<div class="input-group" id="mphField">
+						<input type="text" class="form-control" placeholder="15" aria-label="Text input with dropdown button" id="bikepackSpd">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">mph
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" id="bikepackSpdUnits">
+								<li><a class="dropdown-item">mph</a></li>
+								<li><a class="dropdown-item">kmh</a></li>
+							</ul>
+						</div>
+					</div>
+					<h1></h1>
+					<button type="button" onclick="calculateBikepack()" class="btn btn-primary">Calculate</button>
+				</form>
+			</div>
+			<div class="col-sm-6 py-3 px-lg-4 border bg-light">
+				<h3 id="daysTime" style="display: none;">This trip will probably take you <b id="days">0.00 days</b>.</h3>
+				<p id="daysTimeParagraph" style="display: none;">Or, to be more specific, <b id="daysAccurate">0.00 days</b>.</h3>
 			</div>
 		</div>
 
@@ -68,20 +127,21 @@
 		</footer>
 
 </body>
-<script>$(".dropdown-menu li a").click(function () {
-		$(this).parents(".input-group-append").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-		$(this).parents(".input-group-append").find('.btn').val($(this).data('value'));
-	});</script>
 <script>
 
 	var horizUnit = "mi";
 	var vertUnit = "feet";
 
+	var bikepackDistUnits = "mi";
+	var bikepackTimeUnits = "hours";
+	var bikepackSpdUnits = "mph";
+
 	var distInMeters = 0;
 
-	function myFunction() {
+	function calculateGrade() {
 		var climbDistance = document.getElementById("climbDistance").value;
 		var climbRise = document.getElementById("climbRise").value;
+
 		if (horizUnit == "mi") {
 			distInMeters = climbDistance * 1609.344;
 		}
@@ -91,6 +151,7 @@
 		}
 		if (horizUnit == "smoots") {
 			climbDistance = climbDistance / 946;
+			distInMeters = climbDistance * 1.706;
 		}
 		if (vertUnit == "meters") {
 			climbRise = climbRise * 3.281;
@@ -122,11 +183,70 @@
 		$("#avgGrade").show();
 		$("#strava").show();
 	}
+
+	function calculateBikepack()
+	{
+		var bikepackDistance = document.getElementById("bikepackDistance").value;
+		var bikepackTime = document.getElementById("bikepackTime").value;
+		var finalTime = 0;
+
+		if (bikepackTimeUnits == "hours")
+		{
+			var bikepackSpd = document.getElementById("bikepackSpd").value;
+			finalTime = bikepackTime * bikepackSpd;
+		}
+		if (bikepackTimeUnits == "mi")
+		{
+			finalTime = bikepackTime;
+		}
+		if (bikepackTimeUnits == "km")
+		{
+			finalTime = bikepackTime / 1.609;
+		}
+		if (bikepackTimeUnits == "smoots")
+		{
+			finalTime = bikepackTime / 946;
+		}
+
+		var finalTaken = bikepackDistance / finalTime;
+		
+		document.getElementById("days").innerHTML = Math.ceil(finalTaken) + " days";
+		document.getElementById("daysAccurate").innerHTML = finalTaken + " days";
+		$("#daysTime").show();
+		$("#daysTimeParagraph").show();
+
+	}
 	$('#horizDistUnits li a').on('click', function () {
 		horizUnit = ($(this).text());
 	});
 	$('#vertDistUnits li a').on('click', function () {
 		vertUnit = ($(this).text());
+	});
+
+	$('#bikepackDistUnits li a').on('click', function () {
+		bikepackDistUnits = ($(this).text());
+	});
+	$('#bikepackTimeUnits li a').on('click', function () {
+		if($(this).text() == "hours")
+		{
+			bikepackTimeUnits = ($(this).text());
+			$("#mphForHours").show();
+			$("#mphField").show();
+		}
+		else
+		{
+			bikepackTimeUnits = ($(this).text());
+			$("#mphForHours").hide();
+			$("#mphField").hide();
+		}
+	});
+	$('#bikepackSpdUnits li a').on('click', function () {
+		bikepackSpdUnits = ($(this).text());
+	});
+
+	$(".dropdown-menu li a").click(function () {
+		$(this).parents(".input-group-append").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+		$(this).parents(".input-group-append").find('.btn').val($(this).data('value'));
 	});
 </script>
 
