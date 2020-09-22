@@ -15,11 +15,11 @@
 
 <body>
 	<div class="container">
-			<div class="py-5 text-center">
-					<img class="mx-auto" src="biketools-assets/bike.svg" alt="" width="144" height="144">
-					<h2>Cycling E-Tools</h2>
-					<p class="lead">A collection of nifty cycling-related calculators to help you out on your next ride.</p>
-				</div>
+		<div class="py-5 text-center">
+			<img class="mx-auto" src="biketools-assets/bike.svg" alt="" width="144" height="144">
+			<h2>Cycling E-Tools</h2>
+			<p class="lead">A collection of nifty cycling-related calculators to help you out on your next ride.</p>
+		</div>
 		<div class="row">
 			<div class="col-sm-6 py-3 px-lg-4 border bg-light">
 				<h3>Average gradient calculator</h3>
@@ -32,19 +32,13 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" id="horizDistUnits">
-								<li>
-									<a class="dropdown-item" href="#">mi</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">km</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">smoots</a>
-								</li>
+								<li><a class="dropdown-item" href="#">mi</a></li>
+								<li><a class="dropdown-item" href="#">km</a></li>
+								<li><a class="dropdown-item" href="#">smoots</a></li>
 							</ul>
 						</div>
 					</div>
-					
+
 					<h6>Enter the elevation gain of the climb:</h6>
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="4688" aria-label="Text input with dropdown button" id="climbRise">
@@ -53,12 +47,8 @@
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu" id="vertDistUnits">
-								<li>
-									<a class="dropdown-item" href="#">feet</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">meters</a>
-								</li>
+								<li><a class="dropdown-item" href="#">feet</a></li>
+								<li><a class="dropdown-item" href="#">meters</a></li>
 							</ul>
 						</div>
 					</div>
@@ -67,13 +57,14 @@
 				</form>
 			</div>
 			<div class="col-sm-6 py-3 px-lg-4 border bg-light">
-					<h3 id="avgGrade" style="display: none;">The average grade of this climb is <b id="id01">0.00%</b>.</h3><br>
-					<h5 id="strava" style="display: none;">On Strava, this climb would be considered <b id="id02">uncategorized</b>.</h5>
+				<h3 id="avgGrade" style="display: none;">The average grade of this climb is<b id="percentGrade">0.00%</b>.</h3>
+				<br>
+				<h5 id="strava" style="display: none;">On Strava, this climb would be considered<b id="climbCat">uncategorized</b>.</h5>
 			</div>
 		</div>
 
 		<footer class="my-5 pt-5 text-muted text-center text-small">
-				<p class="mb-1">&copy; 2017 Drew Fink</p>
+			<p class="mb-1">&copy; 2017 Drew Fink</p>
 		</footer>
 
 </body>
@@ -83,69 +74,60 @@
 	});</script>
 <script>
 
-var horizUnit = "mi";
-var vertUnit = "feet";
+	var horizUnit = "mi";
+	var vertUnit = "feet";
 
-var distInMeters = 0;
+	var distInMeters = 0;
 
-function myFunction() {
-			var climbDistance = document.getElementById("climbDistance").value;
-			var climbRise = document.getElementById("climbRise").value;
-			if(horizUnit == "mi")
-			{
-				distInMeters = climbDistance * 1609.344;
-			}
-			if(horizUnit == "km")
-			{
-				climbDistance = climbDistance / 1.609;
-				distInMeters = climbDistance * 1000;
-			}
-			if(horizUnit == "smoots")
-			{
-				climbDistance = climbDistance / 946;
-			}
-			if(vertUnit == "meters")
-			{
-				climbRise = climbRise * 3.281;
-			}
-			var gradient = ((climbRise / (climbDistance * 5280)) * 100).toFixed(2);
+	function myFunction() {
+		var climbDistance = document.getElementById("climbDistance").value;
+		var climbRise = document.getElementById("climbRise").value;
+		if (horizUnit == "mi") {
+			distInMeters = climbDistance * 1609.344;
+		}
+		if (horizUnit == "km") {
+			climbDistance = climbDistance / 1.609;
+			distInMeters = climbDistance * 1000;
+		}
+		if (horizUnit == "smoots") {
+			climbDistance = climbDistance / 946;
+		}
+		if (vertUnit == "meters") {
+			climbRise = climbRise * 3.281;
+		}
+		var gradient = ((climbRise / (climbDistance * 5280)) * 100).toFixed(2);
 
-			var stravaCat = distInMeters * gradient;
+		var stravaCat = distInMeters * gradient;
 
-			if(stravaCat >= 80000)
-			{
-				document.getElementById("id02").innerHTML = "hors catégorie (HC)";
-			}
-			else if(stravaCat >= 64000)
-			{
-				document.getElementById("id02").innerHTML = "category 1";
-			}
-			else if(stravaCat >= 32000)
-			{
-				document.getElementById("id02").innerHTML = "category 2";
-			}
-			else if(stravaCat >= 16000)
-			{
-				document.getElementById("id02").innerHTML = "category 3";
-			}
-			else if(stravaCat >= 8000)
-			{
-				document.getElementById("id02").innerHTML = "category 4";
-			}
-			else
-			{
-				document.getElementById("id02").innerHTML = "uncategorized";
-			}
+		if (stravaCat >= 80000) {
+			document.getElementById("climbCat").innerHTML = "hors catégorie (HC)";
+		}
+		else if (stravaCat >= 64000) {
+			document.getElementById("climbCat").innerHTML = "category 1";
+		}
+		else if (stravaCat >= 32000) {
+			document.getElementById("climbCat").innerHTML = "category 2";
+		}
+		else if (stravaCat >= 16000) {
+			document.getElementById("climbCat").innerHTML = "category 3";
+		}
+		else if (stravaCat >= 8000) {
+			document.getElementById("climbCat").innerHTML = "category 4";
+		}
+		else {
+			document.getElementById("climbCat").innerHTML = "uncategorized";
+		}
 
-			document.getElementById("id01").innerHTML = gradient + "%";
-			$("#avgGrade").show();
-			$("#strava").show();
-}
-$('#horizDistUnits li a').on('click', function(){
-    horizUnit = ($(this).text());
-});
-$('#vertDistUnits li a').on('click', function(){
-    vertUnit = ($(this).text());
-});
+		document.getElementById("percentGrade").innerHTML = gradient + "%";
+		$("#avgGrade").show();
+		$("#strava").show();
+	}
+	$('#horizDistUnits li a').on('click', function () {
+		horizUnit = ($(this).text());
+	});
+	$('#vertDistUnits li a').on('click', function () {
+		vertUnit = ($(this).text());
+	});
 </script>
+
 </html>
